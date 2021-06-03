@@ -1,7 +1,7 @@
-# Indexer
+# Laravel-Indexer
 
 This package allows you to scrape your entire website and create a searchable index of it.
-Indexer will scan your site's internal links recursivly and save all content to an index table.
+Laravel-Indexer will scan your site's internal links recursivly and save all content to an index table.
 The contents of this table are then easily searchable and you can build custom full-text-search.
 
 ## Install
@@ -9,7 +9,7 @@ The contents of this table are then easily searchable and you can build custom f
 Install the package via composer:
 
 ```shell
-composer require aw-studio/indexer
+composer require aw-studio/laravel-indexer
 ```
 
 Publish the migration and config files:
