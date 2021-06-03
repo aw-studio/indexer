@@ -49,6 +49,10 @@ class CreateIndexCommand extends Command
 
         $excludePaths = $this->getExcludedPaths();
 
+        $bar = $this->output->createProgressBar(count($urls));
+
+        $bar->start();
+
         foreach ($urls as $url) {
             // skip excluded
             if (in_array($url, config('indexer.exclude'))) {
@@ -90,7 +94,9 @@ class CreateIndexCommand extends Command
                     ]);
                 }
             }
+            $bar->advance();
         }
+        $bar->finish();
     }
 
 
