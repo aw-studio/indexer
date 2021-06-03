@@ -1,14 +1,24 @@
 # Indexer
 
+This package allows you to scrape your entire website and create a searchable index of it.
+Indexer will scan your site's internal links recursivly and save all content to an index table.
+The contents of this table are then easily searchable and you can build custom full-text-search.
+
 ## Install
+
+Install the package via composer:
 
 ```shell
 composer require aw-studio/indexer
 ```
 
+Publish the migration and config files:
+
 ```shell
 php artisan vendor:publish --tag=indexer
 ```
+
+Create the database-table:
 
 ```shell
 php artisan migrate
@@ -16,7 +26,7 @@ php artisan migrate
 
 ## Config
 
-TODO.
+You can configure the packe in the `config/indexer.php`.
 
 ## Usage
 
@@ -50,3 +60,5 @@ $results = Indexer::search('apple');
 //   },
 // ]
 ```
+
+The indexing command will always create a new index and purge the page_index table.

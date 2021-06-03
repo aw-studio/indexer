@@ -35,6 +35,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Title Source
+    |--------------------------------------------------------------------------
+    |
+    | This option controls which tag should be used as a title for a record.
+    | A good source for a title might be a page's H1. If No H1 is present
+    | the <title> tag might be an alternative.
+    |
+    */
+
+    'title' => [
+        'h1',
+        'title',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Tags to be removed before indexing
     |--------------------------------------------------------------------------
     |

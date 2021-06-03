@@ -262,11 +262,10 @@ class CreateIndexCommand extends Command
 
     public function getTitle(DOMDocument $doc, string $url)
     {
-        foreach ($doc->getElementsByTagName('h1') as $h1) {
-            return $this->cleanup($h1->textContent);
-        }
-        foreach ($doc->getElementsByTagName('title') as $title) {
-            return $this->cleanup($title->textContent);
+        foreach (config('indexer.title') as $tag) {
+            foreach ($doc->getElementsByTagName($tag) as $title) {
+                return $this->cleanup($title->textContent);
+            }
         }
 
         // if no h1 or title present, try to get meta tags title
