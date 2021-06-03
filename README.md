@@ -61,4 +61,18 @@ $results = Indexer::search('apple');
 // ]
 ```
 
+A SearchController might look something like this:
+
+```php
+use AwStudio\Indexer\Indexer;
+
+class MyCustomSearchController
+{
+    public function __invoke(Request $request)
+    {
+        return Indexer::search($request->searchterm);
+    }
+}
+```
+
 The indexing command will always create a new index and purge the page_index table.
