@@ -1,0 +1,36 @@
+{
+    "name": "aw-studio/indexer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jannes Behrens",
+            "email": "jannes@aw-studio.de"
+        }
+    ],
+    "description": "Crawl your website and create an searchable index for all pages.",
+    "require": {
+        "laravel/framework": "^8.40"
+    },
+    "autoload": {
+        "psr-4": {
+            "AwStudio\\Indexer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AwStudio\\Indexer\\IndexerServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
