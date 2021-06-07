@@ -2,8 +2,8 @@
 
 namespace AwStudio\Indexer\Models;
 
-use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class WebPage extends Model
 {
@@ -19,9 +19,9 @@ class WebPage extends Model
         'lang',
         'title',
         'tag',
-        'content'
+        'content',
     ];
-   
+
     /**
      * Hiddem attributes.
      *
