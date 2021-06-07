@@ -9,6 +9,7 @@
 	],
 	"description": "Crawl your website and create an searchable index for all pages.",
 	"require": {
+		"php": "^8.0",
 		"laravel/scout": "^9.0",
 		"illuminate/support": "^8.0",
 		"illuminate/database": "^8.0",
