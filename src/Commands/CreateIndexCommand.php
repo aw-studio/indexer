@@ -4,9 +4,9 @@ namespace AwStudio\Indexer\Commands;
 
 use DOMDocument;
 use GuzzleHttp\Client;
-use AwStudio\Indexer\Models\PageIndexRecord;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use AwStudio\Indexer\Models\WebPage;
 
 class CreateIndexCommand extends Command
 {
@@ -43,7 +43,7 @@ class CreateIndexCommand extends Command
     {
         $urls = $this->createSitemap($this->argument('url') ?: config('indexer.default_url'));
 
-        DB::table('page_index')->truncate();
+        DB::table(config('indexer.table'))->truncate();
 
         $nodes = config('indexer.tags');
 
@@ -85,7 +85,8 @@ class CreateIndexCommand extends Command
 
             foreach ($nodes as $node) {
                 foreach ($doc->getElementsByTagName($node) as $paragraph) {
-                    PageIndexRecord::updateOrCreate([
+                    $model = config('indexer.model');
+                    $model::updateOrCreate([
                         'url' => $url,
                         'lang' => $this->getLang($doc),
                         'title' => $this->getTitle($doc, $url),
