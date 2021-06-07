@@ -82,5 +82,26 @@ return [
         // https://my-site.com/secret-projects*
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | WebPage Model
+    |--------------------------------------------------------------------------
+    |
+    | This model is responsible for storing webpage content in the database.
+    |
+    */
 
+    'model' => AwStudio\Indexer\Models\WebPage::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Webpage Databasetable Name
+    |--------------------------------------------------------------------------
+    |
+    | You may change the database table name of the table that store web page
+    | content.
+    |
+    */
+
+    'table' => 'web_pages'
 ];

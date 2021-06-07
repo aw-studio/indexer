@@ -27,9 +27,5 @@ class IndexerServiceProvider extends ServiceProvider
                 CreateIndexCommand::class,
             ]);
         }
-
-        $this->app->bind(PageIndex::class, function ($searchterm) {
-            return new PageIndex($searchterm);
-        });
     }
 }

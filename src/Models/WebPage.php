@@ -2,16 +2,12 @@
 
 namespace AwStudio\Indexer\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
-class PageIndexRecord extends Model
+class WebPage extends Model
 {
-    /**
-     * Page Index Database Table.
-     *
-     * @var array
-     */
-    protected $table = 'page_index';
+    use Searchable;
 
     /**
      * Fillable attributes.
@@ -36,4 +32,14 @@ class PageIndexRecord extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return config('indexer.table');
+    }
 }

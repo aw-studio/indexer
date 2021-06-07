@@ -13,7 +13,7 @@ class CreatePageIndexTable extends Migration
      */
     public function up()
     {
-        Schema::create('page_index', function (Blueprint $table) {
+        Schema::create(config('indexer.table'), function (Blueprint $table) {
             $table->id();
             $table->string('url');
             $table->string('lang')->nullable();
@@ -31,6 +31,6 @@ class CreatePageIndexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('index_pages');
+        Schema::dropIfExists(config('indexer.table'));
     }
 }
