@@ -20,7 +20,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option defines wich parser you would like to use for getting the
-    | html from the URLs
+    | html from the URLs.
     |
     */
 

@@ -25,7 +25,7 @@ class CreateIndexCommand extends Command
     protected $description = 'Create a search index of a website.';
 
     /**
-     * The URL-Parser
+     * The URL-Parser.
      *
      * @var UrlParser
      */

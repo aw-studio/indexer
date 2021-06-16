@@ -7,7 +7,7 @@ use AwStudio\Indexer\Contracts\UrlParser;
 class GetHtml implements UrlParser
 {
     /**
-     * Get the URLs html
+     * Get the URLs html.
      *
      * @return void
      */
