@@ -9,7 +9,7 @@ class GetHtml implements UrlParser
     /**
      * Get the URLs html.
      *
-     * @return void
+     * @return string
      */
     public function getHtml(string $url): string
     {
