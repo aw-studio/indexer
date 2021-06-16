@@ -234,7 +234,7 @@ class CreateIndexCommand extends Command
      * @param array $index
      * @return array
      */
-    public function createSitemap(string $next = null, $todo = [], $index = []): array
+    public function createSitemap(?string $next = null, $todo = [], $index = []): array
     {
         // see if there is a next url, that should be scraped
         if ($next) {
