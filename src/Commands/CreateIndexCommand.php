@@ -6,7 +6,7 @@ use DOMDocument;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use AwStudio\Indexer\Models\WebPage;
+use AwStudio\Indexer\Contracts\UrlParser;
 
 class CreateIndexCommand extends Command
 {
@@ -15,7 +15,7 @@ class CreateIndexCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'indexer:run {url?}';
+    protected $signature = 'indexer:run {url?} {--once}';
 
     /**
      * The console command description.
@@ -25,12 +25,22 @@ class CreateIndexCommand extends Command
     protected $description = 'Create a search index of a website.';
 
     /**
+     * The URL-Parser
+     *
+     * @var UrlParser
+     */
+    protected UrlParser $parser;
+
+    /**
      * Create a new command instance.
      *
      * @return void
      */
     public function __construct()
     {
+        $parser = config('indexer.url_parser');
+        $this->parser = new $parser;
+
         parent::__construct();
     }
 
@@ -41,7 +51,19 @@ class CreateIndexCommand extends Command
      */
     public function handle()
     {
-        $urls = $this->createSitemap($this->argument('url') ?: config('indexer.default_url'));
+        $url = $this->argument('url') ?: config('indexer.default_url');
+
+        if (!$url) {
+            $this->info('No URL has been set');
+            return;
+        }
+
+        if ($this->option('once')) {
+            $urls []= $url;
+        } else {
+            $urls = $this->createSitemap($url);
+        }
+
 
         DB::table(config('indexer.table'))->truncate();
 
@@ -70,7 +92,7 @@ class CreateIndexCommand extends Command
             }
 
             // get content
-            $content = file_get_contents($url);
+            $content = $this->parser->getHtml($url);
 
             foreach (config('indexer.remove') as $tag) {
                 $content = $this->removeTag($tag, $content);
