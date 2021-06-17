@@ -36,43 +36,10 @@ You can create an index of your website with the following command:
 php artisan indexer:run
 ```
 
-Once an index is created your can perfom a search
+Once an index is created your can perfom a search on the `WebPage` model:
 
 ```php
-use AwStudio\Indexer\Indexer;
+use AwStudio\Indexer\Models\WebPage;
 
-$results = Indexer::search('apple');
-
-// [
-//   {
-//     "url": "https://www.my-site.com/fruits",
-//     "lang": "en",
-//     "title": "Fruits are awesome",
-//     "tag": "p",
-//     "content": "We really like mangos, oranges and pineapples."
-//   },
-//   {
-//     "url": "https://www.my-site.com/tech",
-//     "lang": "en",
-//     "title": "The new MacBook",
-//     "tag": "p",
-//     "content": "Apple is about to release a new MacBook Pro."
-//   },
-// ]
+$results = WebPage::search($request->search)->take(10)->get();
 ```
-
-A SearchController might look something like this:
-
-```php
-use AwStudio\Indexer\Indexer;
-
-class MyCustomSearchController
-{
-    public function __invoke(Request $request)
-    {
-        return Indexer::search($request->searchterm);
-    }
-}
-```
-
-The indexing command will always create a new index and purge the page_index table.
