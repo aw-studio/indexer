@@ -2,11 +2,10 @@
 
 namespace AwStudio\Indexer;
 
-use Illuminate\Support\ServiceProvider;
 use AwStudio\Indexer\Commands\RunCommand;
 use AwStudio\Indexer\Contracts\HtmlLoader;
 use Illuminate\Contracts\Container\Container;
-use AwStudio\Indexer\Commands\CreateIndexCommand;
+use Illuminate\Support\ServiceProvider;
 
 class IndexerServiceProvider extends ServiceProvider
 {
