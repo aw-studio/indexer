@@ -2,13 +2,13 @@
 
 namespace AwStudio\Indexer\Commands;
 
-use AwStudio\Indexer\Contracts\UrlParser;
 use DOMDocument;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use AwStudio\Indexer\Contracts\HtmlLoader;
 
-class CreateIndexCommand extends Command
+class RunCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -25,22 +25,14 @@ class CreateIndexCommand extends Command
     protected $description = 'Create a search index of a website.';
 
     /**
-     * The URL-Parser.
-     *
-     * @var UrlParser
-     */
-    protected UrlParser $parser;
-
-    /**
      * Create a new command instance.
      *
+     * @param HtmlLoader $loader
      * @return void
      */
-    public function __construct()
-    {
-        $parser = config('indexer.url_parser');
-        $this->parser = new $parser;
-
+    public function __construct(
+        protected HtmlLoader $loader,
+    ) {
         parent::__construct();
     }
 
@@ -92,7 +84,7 @@ class CreateIndexCommand extends Command
             }
 
             // get content
-            $content = $this->parser->getHtml($url);
+            $content = $this->loader->load($url);
 
             foreach (config('indexer.remove') as $tag) {
                 $content = $this->removeTag($tag, $content);
@@ -139,9 +131,7 @@ class CreateIndexCommand extends Command
             if (strpos($baseUrl, 'ttps://') === false) {
                 $prefix = 'http';
             }
-            $client = new Client();
-            $response = $client->request('GET', $url);
-            $html = $response->getBody();
+            $html = $this->loader->load($url);
             //Getting the exact url without http or https
             $url = str_replace('http://www.', '', $url);
             $url = str_replace('https://www.', '', $url);

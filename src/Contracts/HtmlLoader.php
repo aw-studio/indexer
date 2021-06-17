@@ -2,7 +2,7 @@
 
 namespace AwStudio\Indexer\Contracts;
 
-interface UrlParser
+interface HtmlLoader
 {
     /**
      * Get the URLs html.
@@ -10,5 +10,5 @@ interface UrlParser
      * @param string $url
      * @return string
      */
-    public function getHtml(string $url);
+    public function load($url);
 }

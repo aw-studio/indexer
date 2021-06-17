@@ -2,17 +2,17 @@
 
 namespace AwStudio\Indexer;
 
-use AwStudio\Indexer\Contracts\UrlParser;
+use AwStudio\Indexer\Contracts\HtmlLoader;
 
-class GetHtml implements UrlParser
+class FileContentHtmlLoader implements HtmlLoader
 {
     /**
-     * Get the URLs html.
+     * Load the URLs html.
      *
      * @param string $url
      * @return string
      */
-    public function getHtml(string $url): string
+    public function load($url)
     {
         return file_get_contents($url);
     }
