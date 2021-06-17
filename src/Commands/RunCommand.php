@@ -2,10 +2,10 @@
 
 namespace AwStudio\Indexer\Commands;
 
+use AwStudio\Indexer\Contracts\HtmlLoader;
 use DOMDocument;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use AwStudio\Indexer\Contracts\HtmlLoader;
 
 class RunCommand extends Command
 {
