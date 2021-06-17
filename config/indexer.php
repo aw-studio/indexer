@@ -16,6 +16,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | HTML Loader
+    |--------------------------------------------------------------------------
+    |
+    | This option defines wich loader you would like to use for receiving the
+    | html from the URLs.
+    |
+    */
+
+    'html_loader' => AwStudio\Indexer\FileContentHtmlLoader::class,
+
+    /*
+    |--------------------------------------------------------------------------
     | Indexed Tags
     |--------------------------------------------------------------------------
     |

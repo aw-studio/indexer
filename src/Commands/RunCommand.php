@@ -2,20 +2,19 @@
 
 namespace AwStudio\Indexer\Commands;
 
+use AwStudio\Indexer\Contracts\HtmlLoader;
 use DOMDocument;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use AwStudio\Indexer\Models\WebPage;
 
-class CreateIndexCommand extends Command
+class RunCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'indexer:run {url?}';
+    protected $signature = 'indexer:run {url?} {--once}';
 
     /**
      * The console command description.
@@ -27,10 +26,12 @@ class CreateIndexCommand extends Command
     /**
      * Create a new command instance.
      *
+     * @param HtmlLoader $loader
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        protected HtmlLoader $loader,
+    ) {
         parent::__construct();
     }
 
@@ -41,7 +42,19 @@ class CreateIndexCommand extends Command
      */
     public function handle()
     {
-        $urls = $this->createSitemap($this->argument('url') ?: config('indexer.default_url'));
+        $url = $this->argument('url') ?: config('indexer.default_url');
+
+        if (! $url) {
+            $this->info('No URL has been set');
+
+            return;
+        }
+
+        if ($this->option('once')) {
+            $urls [] = $url;
+        } else {
+            $urls = $this->createSitemap($url);
+        }
 
         DB::table(config('indexer.table'))->truncate();
 
@@ -70,7 +83,7 @@ class CreateIndexCommand extends Command
             }
 
             // get content
-            $content = file_get_contents($url);
+            $content = $this->loader->load($url);
 
             foreach (config('indexer.remove') as $tag) {
                 $content = $this->removeTag($tag, $content);
@@ -81,8 +94,6 @@ class CreateIndexCommand extends Command
             $doc->loadHTML($content);
             libxml_clear_errors();
 
-                
-
             foreach ($nodes as $node) {
                 foreach ($doc->getElementsByTagName($node) as $paragraph) {
                     $model = config('indexer.model');
@@ -91,7 +102,7 @@ class CreateIndexCommand extends Command
                         'lang' => $this->getLang($doc),
                         'title' => $this->getTitle($doc, $url),
                         'tag' => $node,
-                        'content' => $this->cleanup($paragraph->textContent)
+                        'content' => $this->cleanup($paragraph->textContent),
                     ]);
                 }
             }
@@ -99,7 +110,6 @@ class CreateIndexCommand extends Command
         }
         $bar->finish();
     }
-
 
     /**
      * Get all urls that are present on a given url for the same host.
@@ -120,9 +130,7 @@ class CreateIndexCommand extends Command
             if (strpos($baseUrl, 'ttps://') === false) {
                 $prefix = 'http';
             }
-            $client = new Client();
-            $response = $client->request('GET', $url);
-            $html = $response->getBody();
+            $html = $this->loader->load($url);
             //Getting the exact url without http or https
             $url = str_replace('http://www.', '', $url);
             $url = str_replace('https://www.', '', $url);
@@ -136,7 +144,7 @@ class CreateIndexCommand extends Command
             // grab all the on the page
             $xpath = new \DOMXPath($dom);
             //finding the a tag
-            $hrefs = $xpath->evaluate("/html/body//a");
+            $hrefs = $xpath->evaluate('/html/body//a');
             //Loop to display all the links
             $length = $hrefs->length;
             //Converting URLs to add the www prefix to host to a common array
@@ -151,7 +159,7 @@ class CreateIndexCommand extends Command
                 $url = str_replace('https://'.$parse['host'], 'https://www.'.$parse['host'], $url);
                 //Replacing the / at the end of any url if present
                 if (substr($url, -1, 1) == '/') {
-                    $url = substr_replace($url, "", -1);
+                    $url = substr_replace($url, '', -1);
                 }
                 array_push($allUrls, $url);
             }
@@ -168,7 +176,7 @@ class CreateIndexCommand extends Command
                     if (strpos($url, 'https://'.$parse['host']) !== false || strpos($url, 'https://www.'.$parse['host']) !== false) {
                         //Replacing the / at the end of any url if present
                         if (substr($url, -1, 1) == '/') {
-                            $url = substr_replace($url, "", -1);
+                            $url = substr_replace($url, '', -1);
                         }
                         //Checking if the link is already preset in the final array
                         $urlSuffix = str_replace('http://www.', '', $url);
@@ -185,13 +193,13 @@ class CreateIndexCommand extends Command
                         if (substr($url, 0, 1) == '/') {
                             //Replacing the / at the end of any url if present
                             if (substr($url, -1, 1) == '/') {
-                                $url = substr_replace($url, "", -1);
+                                $url = substr_replace($url, '', -1);
                             }
                             $newUrl = 'http://www.'.$parse['host'].$url;
                             $secondUrl = 'https://www.'.$parse['host'].$url;
                             if ($url != $parse['host']) {
                                 //Checking if the link is already preset in the final array and the common array
-                                if (!in_array($secondUrl, $urls) && !in_array($secondUrl, $allUrls) && !in_array($newUrl, $allUrls)) {
+                                if (! in_array($secondUrl, $urls) && ! in_array($secondUrl, $allUrls) && ! in_array($newUrl, $allUrls)) {
                                     if ($prefix == 'https') {
                                         $newUrl = $secondUrl;
                                     }
@@ -207,16 +215,15 @@ class CreateIndexCommand extends Command
         return array_unique($urls);
     }
 
-
     /**
-     * Create a complete sitemap for a domain
+     * Create a complete sitemap for a domain.
      *
      * @param string $next
      * @param array $todo
      * @param array $index
      * @return array
      */
-    public function createSitemap(string|null $next = null, $todo = [], $index = []): array
+    public function createSitemap(?string $next = null, $todo = [], $index = []): array
     {
         // see if there is a next url, that should be scraped
         if ($next) {
@@ -234,7 +241,7 @@ class CreateIndexCommand extends Command
             );
 
             // add the visited url to the index
-            $index[]=$next;
+            $index[] = $next;
 
             // the next url is the first url from the todos of which it is removed
             $next = array_shift($todo);
@@ -245,7 +252,7 @@ class CreateIndexCommand extends Command
         }
     }
 
-    public function removeTag(string $tag, string $html) : string
+    public function removeTag(string $tag, string $html): string
     {
         return preg_replace("#<$tag(.*?)>(.*?)</$tag>#is", '', $html);
     }
@@ -256,14 +263,14 @@ class CreateIndexCommand extends Command
         $string = preg_replace('/\s+/', ' ', $string);
 
         // remove line breaks
-        $string = str_replace("\n", "", $string);
+        $string = str_replace("\n", '', $string);
 
         // remove spaces at start and end of string
         $string = trim($string);
-        
+
         // remove colons at start and end of string
         $string = trim($string, ':');
-        
+
         return $string;
     }
 
