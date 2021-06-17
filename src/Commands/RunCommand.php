@@ -3,7 +3,6 @@
 namespace AwStudio\Indexer\Commands;
 
 use DOMDocument;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use AwStudio\Indexer\Contracts\HtmlLoader;
