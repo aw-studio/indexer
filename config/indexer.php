@@ -16,15 +16,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | URL Parser
+    | HTML Loader
     |--------------------------------------------------------------------------
     |
-    | This option defines wich parser you would like to use for getting the
+    | This option defines wich loader you would like to use for receiving the
     | html from the URLs.
     |
     */
 
-    'url_parser' => AwStudio\Indexer\GetHtml::class,
+    'html_loader' => AwStudio\Indexer\FileContentHtmlLoader::class,
 
     /*
     |--------------------------------------------------------------------------

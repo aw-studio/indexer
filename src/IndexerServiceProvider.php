@@ -4,8 +4,9 @@ namespace AwStudio\Indexer;
 
 use Illuminate\Support\ServiceProvider;
 use AwStudio\Indexer\Commands\RunCommand;
-use AwStudio\Indexer\Commands\CreateIndexCommand;
 use AwStudio\Indexer\Contracts\HtmlLoader;
+use Illuminate\Contracts\Container\Container;
+use AwStudio\Indexer\Commands\CreateIndexCommand;
 
 class IndexerServiceProvider extends ServiceProvider
 {
@@ -59,10 +60,10 @@ class IndexerServiceProvider extends ServiceProvider
      */
     protected function registerHtmlLoader()
     {
-        $this->app->singleton('indexer.loader', function ($app) {
-            $parser = $app['config']['indexer.html_loader'];
-
-            return new $parser;
+        $this->app->singleton('indexer.loader', function (Container $app) {
+            return $app->make(
+                $app['config']['indexer.html_loader']
+            );
         });
 
         // Enable automated dependency injection on the interface.
