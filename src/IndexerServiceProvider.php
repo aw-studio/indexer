@@ -16,6 +16,8 @@ class IndexerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/indexer.php', 'indexer');
+        
         $this->registerHtmlLoader();
         $this->registerRunCommand();
 
@@ -61,7 +63,7 @@ class IndexerServiceProvider extends ServiceProvider
     {
         $this->app->singleton('indexer.loader', function (Container $app) {
             return $app->make(
-                $app['config']['indexer.html_loader'] ?? FileContentHtmlLoader::class
+                $app['config']['indexer.html_loader']
             );
         });
 
