@@ -61,7 +61,7 @@ class IndexerServiceProvider extends ServiceProvider
     {
         $this->app->singleton('indexer.loader', function (Container $app) {
             return $app->make(
-                $app['config']['indexer.html_loader']
+                $app['config']['indexer.html_loader'] ?? FileContentHtmlLoader::class
             );
         });
 
