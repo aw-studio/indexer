@@ -1,40 +1,40 @@
 {
-	"name": "aw-studio/laravel-indexer",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Jannes Behrens",
-			"email": "jannes@aw-studio.de"
-		}
-	],
-	"description": "Crawl your website and create an searchable index for all pages.",
-	"require": {
-		"php": "^8.0|^8.1|^8.2",
-		"laravel/scout": "^9.0",
-		"illuminate/support": "^8.0|^9.0|^10.0",
-		"illuminate/database": "^8.0|^9.0|^10.0",
-		"guzzlehttp/guzzle": "^7.3"
-	},
-	"autoload": {
-		"psr-4": {
-			"AwStudio\\Indexer\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Tests\\": "tests/"
-		}
-	},
-	"extra": {
-		"laravel": {
-			"providers": [
-				"AwStudio\\Indexer\\IndexerServiceProvider"
-			]
-		},
-		"branch-alias": {
-			"dev-main": "1.x-dev"
-		}
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true
+    "name": "aw-studio/laravel-indexer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jannes Behrens",
+            "email": "jannes@aw-studio.de"
+        }
+    ],
+    "description": "Crawl your website and create an searchable index for all pages.",
+    "require": {
+        "php": "^8.0|^8.1|^8.2",
+        "laravel/scout": "^10.0",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+        "illuminate/database": "^8.0|^9.0|^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "AwStudio\\Indexer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AwStudio\\Indexer\\IndexerServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
